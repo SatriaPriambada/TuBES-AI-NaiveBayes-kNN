@@ -16,8 +16,8 @@ public class TUBES2AIWEKA {
 
     
     private static String[][] DataSet;
-    private static String[] Acuan;
-    private static int temp,yes,no;
+    private static String[][] Acuan;
+    private static int temp,yes,no,truePlus,trueMin,falsePlus,falseMin;
     private static String kelas;
     
     public static void KNN ()
@@ -32,7 +32,7 @@ public class TUBES2AIWEKA {
     
     public static void main(String[] args) 
     {
-        TUBES2AIWEKA.DataSet = new String[14][6];
+        TUBES2AIWEKA.DataSet = new String[14][5];
             DataSet[0][0] = "sunny";
             DataSet[0][1] = "hot";
             DataSet[0][2] = "high";
@@ -104,45 +104,57 @@ public class TUBES2AIWEKA {
             DataSet[13][3] = "TRUE";
             DataSet[13][4] = "no";
             
-        TUBES2AIWEKA.Acuan = new String[5];
-            Acuan[0] = "sunny";
-            Acuan[1] = "hot";
-            Acuan[2] = "normal";
-            Acuan[3] = "TRUE";
-            Acuan[4] = "yes";
+        Scanner in = new Scanner(System.in);
+        int num = in.nextInt();    
         
+        truePlus = 0;
+        trueMin = 0;
+        falsePlus = 0;
+        falseMin = 0;
+        
+        TUBES2AIWEKA.Acuan = new String[14][6];
+        
+        for (int k=0; k<14; k++)
+        {
+            
+            for (int i=0; i<14; i++)
+            {
+                for (int j=0; j<5; j++)
+                {
+                    Acuan[i][j]=DataSet[i][j];
+                }
+            }
+            
             for (int i=0; i<14; i++)
             {
                 temp = 0;
-                for (int j=0; j<5; j++)
+                for (int j=0; j<4; j++)
                 {
-                    if (DataSet[i][j] != Acuan[j])
+                    if (DataSet[i][j] != Acuan[k][j])
                     {
                         temp++;
                     }
                 }
-                DataSet[i][5] = Integer.toString(temp);
+                Acuan[i][5] = Integer.toString(temp);
             }
             
-            Arrays.sort(DataSet, new Comparator<String[]>() 
+            Arrays.sort(Acuan, new Comparator<String[]>() 
             {
                 @Override
-                public int compare(String[] s1, String[] s2) {
+                public int compare(String[] s1, String[] s2) 
+                {
                     String t1 = s1[5];
                     String t2 = s2[5];
                     return t1.compareTo(t2);
                 }
             });
-
-            Scanner in = new Scanner(System.in);
-            int num = in.nextInt();
             
             yes = 0;
             no = 0;
             
             for (int i=0; i<num; i++)
             {
-                if (DataSet[i][4] == "yes")
+                if (Acuan[i][4] == "yes")
                 {
                     yes++;
                 }
@@ -152,34 +164,57 @@ public class TUBES2AIWEKA {
                 }
             }
             
-            if (yes>no)
+            if (yes>=no)
             {
                 kelas = "yes";
             }
             else
             {
-                if (yes<no)
-                {
                     kelas = "no";
+            }
+            
+            if (kelas==DataSet[k][4])
+            {
+                if (kelas=="yes")
+                {
+                    truePlus++;
                 }
                 else
                 {
-                    kelas = "Unclassified";
+                    trueMin++;
+                }
+            }
+            else
+            {
+                if (kelas=="yes")
+                {
+                    falsePlus++;
+                }
+                else
+                {
+                    falseMin++;
                 }
             }
             
             for (int i=0; i<num; i++)
             {
-                for (int j=0; j<6;j++)
+                for (int j=0; j<6; j++)
                 {
-                    System.out.print (DataSet[i][j] + " ");
+                    System.out.print (Acuan[i][j] + " ");
                 }
                 System.out.println();
             }
-           
-            System.out.println ("Jumlah Yes = " + yes);
-            System.out.println ("Jumlah No = " + no);
-            System.out.println ("Kelas = " + kelas);
+            
+            System.out.println (kelas + " " + DataSet[k][4]);
+            System.out.println (truePlus + " " + falsePlus + " " + falseMin + " " + trueMin );
+            
+        }
+            
+            
+        System.out.println ("True Positif = " + truePlus);
+        System.out.println ("False Positif = " + falsePlus);
+        System.out.println ("False Negatif = " + falseMin);
+        System.out.println ("True Negatif = " + trueMin);
     }
 }
 
