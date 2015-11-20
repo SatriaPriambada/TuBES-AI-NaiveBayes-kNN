@@ -1,9 +1,10 @@
+package TUBES2AIWEKA;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package tubes2ai.weka;
 
 import java.util.Scanner;
 import java.util.Arrays;
@@ -351,7 +352,7 @@ public class TUBES2AIWEKA {
     
     public static void InputToArray()
     {
-        TUBES2AIWEKA.DataSet = new String[NTotal][6];
+        DataSet = new String[NTotal][6];
             DataSet[0][0] = "sunny";
             DataSet[0][1] = "hot";
             DataSet[0][2] = "high";
@@ -431,7 +432,7 @@ public class TUBES2AIWEKA {
         Scanner in = new Scanner(System.in);
         int num = in.nextInt();    
   
-        TUBES2AIWEKA.Acuan = new String[NTotal][6];      
+        Acuan = new String[NTotal][6];      
         KNNTenFold (DataSet,Acuan,num);
     }
 }
