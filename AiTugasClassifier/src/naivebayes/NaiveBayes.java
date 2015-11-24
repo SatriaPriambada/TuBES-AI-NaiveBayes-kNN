@@ -9,11 +9,8 @@
 package naivebayes;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.io.FileInputStream;
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Set;
 import java.util.HashSet;
@@ -29,7 +26,7 @@ public class NaiveBayes {
     /**
      * @param args the command line arguments
      */
-    public static int SearchMatrix(ArrayList<String> a, String s){
+    public int SearchMatrix(ArrayList<String> a, String s){
         for(int i=0;i<a.size();i++){
           if(a.get(i).equals(s)){
            return i;
@@ -39,6 +36,7 @@ public class NaiveBayes {
     }
     public void TestNaiveBayes(String[][] data, String[][] dataTest) throws FileNotFoundException, IOException {
         ArrayList<ArrayList<String>> matrix = new ArrayList<ArrayList<String>>();
+        ArrayList<ArrayList<String>> matrixTest = new ArrayList<ArrayList<String>>();
         ArrayList<ArrayList<String>> matrixy = new ArrayList<ArrayList<String>>();
         ArrayList<ArrayList<String>> matrixn = new ArrayList<ArrayList<String>>();
         ArrayList<ArrayList<String>> NaiveBayes = new ArrayList<ArrayList<String>>();
@@ -60,17 +58,19 @@ public class NaiveBayes {
         //Read File Line By Line
         int cData = 0;
         int cattrData =0;
-        while (data[cData][0] != null){
+        int IndexKelas = 0;
+        while (!(data[cData][0].equals(""))){
             row1 = new ArrayList<String>();
             cattrData=0;
-            while (data[cData][cattrData] != null){
+            while (!(data[cData][cattrData].equals(""))){
                 row1.add(data[cData][cattrData]);
                 cattrData++;
             }
+            IndexKelas = cattrData - 1; // kurangi satu karena array dimulai dari index 0
             matrix.add(row1);
             cData++;
         }
-          
+        System.out.println(IndexKelas);  
         //Hash Table
          for(int k=0; k<matrix.size();k++){
             for(int l=0;l<row1.size()-1;l++){
@@ -170,50 +170,50 @@ public class NaiveBayes {
                 e.printStackTrace();
                 System.out.println("No such file exists.");
             }
-        /*if(row2.isEmpty()){
-            row2.add(matrix.get(0).get(0));
-        }
-        //for (int j=0;j<row2.size();j++){
-            for(int k=1;k<matrix.size();k++){
-                if(row2.get(0).contentEquals(matrix.get(k).get(0))){
-                }
-                else {
-                  row2.add(matrix.get(k).get(0));
-                  System.out.println(row2.size());
-                }
+        /*Start with testing from model*/
+         //Read File Line By Line
+        cData = 0;
+        cattrData =0;
+        while (!(dataTest[cData][0].equals(""))){
+            row1 = new ArrayList<String>();
+            cattrData=0;
+            while (!(dataTest[cData][cattrData].equals(""))){
+                row1.add(dataTest[cData][cattrData]);
+                cattrData++;
             }
-        //}*/
-         System.out.println("MatrixFULL = "+matrix);
-         System.out.println("Matrix Baris 1 = "+matrix.get(0));
+            matrixTest.add(row1);
+            cData++;
+        }   
+         System.out.println("Matrix yang akan di test FULL = "+ matrixTest);
+         System.out.println("Matrix Baris 1 = "+ matrixTest.get(0));
          Pno = (double)totalno/ ((double)totalyes + (double)totalno);
          Pyes = (double)totalyes/ ((double)totalyes + (double)totalno);
          System.out.println("Pno = "+Pno);
                  System.out.println("Pyes = "+Pyes);
-         for(int i=0; i<matrix.size(); i++){
-             for(int j=0; j<matrix.get(i).size()-1; j++){
-              String compareString = matrix.get(i).get(j);
+         for(int i=0; i< matrixTest.size(); i++){
+             for(int j=0; j<matrixTest.get(i).size()-2; j++){
+              String compareString = matrixTest.get(i).get(j);
                  int hasilsearch = SearchMatrix(row2,compareString);
                  Pno = Pno * Double.valueOf(row4.get(hasilsearch)) / totalno;
                  Pyes = Pyes * Double.valueOf(row3.get(hasilsearch)) / totalyes;
-                 
              }
              System.out.println("baris ke "+ i);
              if(Pno > Pyes){
              //Kesimpulan Baris ke-i diklasifikasikan sebagai no
-                if(matrix.get(i).get(4).equals("no")){
-                trueneg++;
+                if(matrixTest.get(i).get(IndexKelas).equals("no")){
+                    trueneg++;
                 }
                 else{
-                falseneg++;
+                    falseneg++;
                 }
              }
              else if (Pyes >= Pno){
              //Kesimpulan Baris ke-i diklasifikasikan sebagai yes
-                if(matrix.get(i).get(4).equals("yes")){
-                truepos++;
+                if(matrixTest.get(i).get(IndexKelas).equals("yes")){
+                    truepos++;
                 }
                 else{
-                falsepos++;
+                    falsepos++;
                 }
              }
              

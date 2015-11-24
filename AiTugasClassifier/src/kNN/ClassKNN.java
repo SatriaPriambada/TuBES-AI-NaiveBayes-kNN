@@ -17,16 +17,21 @@ public class ClassKNN {
     
     private static String[][] Data;
     private static String[][] AcuanAwal;
-    private static int temp,yes,no,truePlus,trueMin,falsePlus,falseMin,jumlahMark,mark,endMark,NTotal=14;
+    private static int temp,yes,no,truePlus,trueMin,falsePlus,falseMin,jumlahMark,mark,endMark,NTotal;
     private static String kelas;
     
-    public void KNNFullTraining (String[][] DataSet, String[][] Acuan, int num, int TotalBaris, int TotalKolom)
+    public void KNNFullTraining (String[][] DataSet, String[][] TestData, int num, int TotalBaris, int TotalKolom)
     {
         truePlus=0;
         trueMin=0;
         falsePlus=0;
         int i,j;
-        
+        NTotal = TotalBaris;
+        System.out.println(TotalKolom);
+        //Total Kolom melambangkan batas akhir dari kolom yang berisi "temp"
+        int KolomPembanding = TotalKolom - 1; // Dalam kasus contoh nilainnya = 5 yang menyimpan jarak euclid dari data yang sedang ditest
+        int IndexKelas = TotalKolom - 2; //Dalam kasus contoh nilainnya = 4 berisi play = "yes" atau "no" 
+        String[][] Acuan = new String[TotalBaris][TotalKolom];
         for (int k=0; k < NTotal; k++)
         {
             //copy acuan data set
@@ -34,21 +39,23 @@ public class ClassKNN {
             {
                 for (j=0; j < 5; j++)
                 {
-                    Acuan[i][j] = DataSet[i][j];
+                    Acuan[i][j] = TestData[i][j];
+                    System.out.print(TestData[i][j]+" ");
                 }
+                System.out.println();
             }
             //hitung jumlah perbedaan
             for (i=0; i<NTotal; i++)
             {
                 temp = 0;
-                for (j=0; j<4; j++)
+                for (j=0; j<IndexKelas; j++)
                 {
                     if (!(DataSet[i][j].equals(Acuan[k][j])))
                     {
                         temp++;
                     }
                 }
-                Acuan[i][5] = Integer.toString(temp);
+                Acuan[i][KolomPembanding] = Integer.toString(temp);
             }
             //bandingkan jumlah perbedaan
             Arrays.sort(Acuan, new Comparator<String[]>() 
@@ -56,18 +63,27 @@ public class ClassKNN {
                 @Override
                 public int compare(String[] s1, String[] s2) 
                 {
-                    String t1 = s1[5];
-                    String t2 = s2[5];
+                    String t1 = s1[KolomPembanding];
+                    String t2 = s2[KolomPembanding];
                     return t1.compareTo(t2);
                 }
             });
             
             yes = 0;
             no = 0;
-            //hitung banyak yes dan no
-            for (i=0; i<num; i++)
+            //print acuan data set
+            for (i=0; i < NTotal; i++)
             {
-                if (Acuan[i][4].equals("yes"))
+                for (j=0; j < KolomPembanding; j++)
+                {
+                    System.out.print(Acuan[i][j]+" ");
+                }
+                System.out.println();
+            }
+            //hitung banyak yes dan no
+            for (i=0; i < num; i++)
+            {
+                if (Acuan[i][IndexKelas].equals("yes"))
                 {
                     yes++;
                 }
@@ -86,7 +102,7 @@ public class ClassKNN {
                 kelas = "no";
             }
             //lihat dengan data set sebenarnya apakah true positif etc
-            if (kelas.equals(DataSet[k][4]))
+            if (kelas.equals(DataSet[k][IndexKelas]))
             {
                 if (kelas.equals("yes"))
                 {
@@ -118,7 +134,7 @@ public class ClassKNN {
                 System.out.println();
             }
             
-            System.out.println (kelas + " " + DataSet[k][4]);
+            System.out.println (kelas + " " + DataSet[k][IndexKelas]);
             System.out.println (truePlus + " " + falsePlus + " " + falseMin + " " + trueMin );
             
         }
@@ -130,7 +146,7 @@ public class ClassKNN {
         System.out.println ("True Negatif = " + trueMin);
     }
     
-    public void KNNTenFold(String[][] DataSet, String[][] Acuan, int num)
+    public void KNNTenFold(String[][] DataSet, String[][] Acuan, int num, int TotalBaris, int TotalKolom)
     {
         int i, j, k, l, currIndex = 0;
         truePlus=0;
@@ -138,7 +154,7 @@ public class ClassKNN {
         falsePlus=0;
         falseMin=0;
         
-       
+        NTotal = TotalBaris;
         jumlahMark = NTotal;
         mark = 0;
         //untuk 9 iterasi pertama        
@@ -149,9 +165,9 @@ public class ClassKNN {
             {
                 for (k=0; k<NTotal; k++)
                 {
-                    for (l=0; l<5; l++)
+                    for (l=0; l<TotalKolom; l++)
                     {
-                        Acuan[k][l]=DataSet[k][l];
+                        Acuan[k][l] = DataSet[k][l];
                     }
                 }
                 for (k=0; k < NTotal; k++)
@@ -159,23 +175,23 @@ public class ClassKNN {
                     if ((k < currIndex) || (k >= currIndex+endMark))
                     {
                         temp = 0;
-                        for (l=0; l<5; l++)
+                        for (l=0; l<TotalKolom; l++)
                         {
                             if (!(DataSet[k][l].equals(Acuan[currIndex][l])))
                                 temp++;
                         }
-                        Acuan[k][5] = Integer.toString(temp);
+                        Acuan[k][TotalKolom] = Integer.toString(temp);
                     }
                     else
-                        Acuan[k][5] = "9";
+                        Acuan[k][TotalKolom] = "9";
                 }
                 Arrays.sort(Acuan, new Comparator<String[]>() 
                 {
                     @Override
                     public int compare(String[] s1, String[] s2) 
                     {
-                        String t1 = s1[5];
-                        String t2 = s2[5];
+                        String t1 = s1[TotalKolom];
+                        String t2 = s2[TotalKolom];
                         return t1.compareTo(t2);
                     }
                 });
@@ -187,7 +203,7 @@ public class ClassKNN {
 
                 for (k=0; k<num; k++)
                 {
-                    if (Acuan[k][4].equals("yes"))
+                    if (Acuan[k][TotalKolom-1].equals("yes"))
                     {
                         yes++;
                     }
@@ -206,7 +222,7 @@ public class ClassKNN {
                         kelas = "no";
                 }
 
-                if (kelas.equals(DataSet[i][4]))
+                if (kelas.equals(DataSet[i][TotalKolom-1]))
                 {
                     if (kelas.equals("yes"))
                     {
@@ -238,7 +254,7 @@ public class ClassKNN {
                     System.out.println();
                 }
                 
-                System.out.println (kelas + " " + DataSet[k][4]);
+                System.out.println (kelas + " " + DataSet[k][TotalKolom-1]);
                 System.out.println (truePlus + " " + falsePlus + " " + falseMin + " " + trueMin );
 
                 currIndex++;
@@ -253,7 +269,7 @@ public class ClassKNN {
         {
             for (k=0; k<NTotal; k++)
                 {
-                    for (l=0; l<5; l++)
+                    for (l=0; l<TotalKolom; l++)
                     {
                         Acuan[k][l]=DataSet[k][l];
                     }
@@ -263,23 +279,23 @@ public class ClassKNN {
                     if ((k < currIndex) || (k >= currIndex+endMark))
                     {
                         temp = 0;
-                        for (l=0; l<5; l++)
+                        for (l=0; l<TotalKolom; l++)
                         {
                             if (!(DataSet[k][l].equals(Acuan[currIndex][l])))
                                 temp++;
                         }
-                        Acuan[k][5] = Integer.toString(temp);
+                        Acuan[k][TotalKolom] = Integer.toString(temp);
                     }
                     else
-                        Acuan[k][5] = "9";
+                        Acuan[k][TotalKolom] = "9";
                 }
                 Arrays.sort(Acuan, new Comparator<String[]>() 
                 {
                     @Override
                     public int compare(String[] s1, String[] s2) 
                     {
-                        String t1 = s1[5];
-                        String t2 = s2[5];
+                        String t1 = s1[TotalKolom];
+                        String t2 = s2[TotalKolom];
                         return t1.compareTo(t2);
                     }
                 });
@@ -290,7 +306,7 @@ public class ClassKNN {
 
                 for (k=0; k<num; k++)
                 {
-                    if (Acuan[k][4].equals("yes"))
+                    if (Acuan[k][TotalKolom-1].equals("yes"))
                     {
                         yes++;
                     }
@@ -309,7 +325,7 @@ public class ClassKNN {
                         kelas = "no";
                 }
 
-                if (kelas.equals(DataSet[i][4]))
+                if (kelas.equals(DataSet[i][TotalKolom-1]))
                 {
                     if (kelas.equals("yes"))
                     {
@@ -341,7 +357,7 @@ public class ClassKNN {
                     System.out.println();
                 }
                 
-                System.out.println (kelas + " " + DataSet[i][4]);
+                System.out.println (kelas + " " + DataSet[i][TotalKolom-1]);
                 System.out.println (truePlus + " " + falsePlus + " " + falseMin + " " + trueMin );
 
                 currIndex++;

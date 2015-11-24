@@ -308,12 +308,11 @@ public class MainGUI extends JFrame {
                            ClassKNN ClassifierKNN = new ClassKNN();
                            System.out.println(cTest+" "+ cKolomTest);
                            int num = Integer.parseInt(entry.getText());
-                           String[][] Acuan = new String[cData][cKolomData+1];
-                           ClassifierKNN.KNNFullTraining(data,Acuan,num,cTest,cKolomTest+1);
+                           ClassifierKNN.KNNFullTraining(data,dataTest,num,cTest,cKolomTest);
                        } else {
                            System.out.println("Please input data first");
                        }
-
+                       
                    }else if (AlgoType.getSelectedIndex()==1){
                        System.out.println("kNN 10-cross-fold");
                        //hide test button
@@ -321,13 +320,13 @@ public class MainGUI extends JFrame {
                        LabelEntry.setVisible(true);
                        entry.setVisible(true);
                        //check jika elemen pertama data tidak null maka mulai algoritma
-                       if (data[0][0] != null ) {
+                       if (!(data[0][0].equals(""))) {
                            System.out.println("Starting Algorithm:");
                            ClassKNN ClassifierKNN = new ClassKNN();
                            System.out.println(cData+" "+ cKolomData);
                            int num = Integer.parseInt(entry.getText());
                            String[][] Acuan = new String[cData][cKolomData+1];
-                           ClassifierKNN.KNNTenFold(data,Acuan,num);
+                           ClassifierKNN.KNNTenFold(data,Acuan,num,cData,cKolomData);
                            
                        } else {
                            System.out.println("Please input data first");
@@ -340,7 +339,7 @@ public class MainGUI extends JFrame {
                        //show open test button
                        openTestBtn.setVisible(true);
                        //check jika elemen pertama data dan dataTest tidak null maka mulai algoritma
-                       if ((data[0][0] != null ) && (dataTest[0][0] != null )) {
+                       if (!(data[0][0].equals(""))  && !(dataTest[0][0].equals("")) ) {
                            System.out.println("Starting Algorithm:");
                            NaiveBayes ClassiferNB = new NaiveBayes();
                            System.out.println(cTest);
@@ -361,7 +360,7 @@ public class MainGUI extends JFrame {
                        LabelEntry.setVisible(false);
                        entry.setVisible(false);
                        //check jika elemen pertama data tidak null maka mulai algoritma
-                       if (data[0][0] != null) {
+                       if (!(data[0][0].equals(""))) {
                            System.out.println("Starting Algorithm:");
                            TenFoldNaiveBayes ClassiferTFNB;
                            ClassiferTFNB = new TenFoldNaiveBayes ();

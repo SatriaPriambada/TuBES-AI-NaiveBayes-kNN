@@ -67,16 +67,20 @@ public class TenFoldNaiveBayes {
         String temp;
         String[] str;
         int counter = 0;
+        int IndexKelas = 0;
         //Read File Line By Line
         int cData = 0;
         int cattrData =0;
-        while (data[cData][0] != null){
+        while (!(data[cData][0].equals(""))){
             row1 = new ArrayList<String>();
-            cattrData=0;
-            while (data[cData][cattrData] != null){
+            cattrData = 0;
+            System.out.println(data[cData][cattrData]);
+            while (!(data[cData][cattrData].equals(""))){
                 row1.add(data[cData][cattrData]);
+                System.out.println(data[cData][cattrData]);
                 cattrData++;
             }
+            IndexKelas = cattrData - 1; //Kurangi 1 karena index dimulai dari 0. Diambil dari sini dengan asumsi test memiliki posisi kelas di paling akhir
             AkuisisiMatrix.add(row1);
             matrix.add(row1);
             cData++;
@@ -245,7 +249,7 @@ public class TenFoldNaiveBayes {
                  System.out.println("baris ke "+ i);
                  if(Pno >= Pyes){
                  //Kesimpulan Baris ke-i diklasifikasikan sebagai no
-                    if(TestMatrix.get(i).get(4).equals("no")){
+                    if(TestMatrix.get(i).get(IndexKelas).equals("no")){
                         trueneg++;
                     }
                     else{
@@ -254,7 +258,7 @@ public class TenFoldNaiveBayes {
                  }
                  else {
                  //Kesimpulan Baris ke-i diklasifikasikan sebagai yes
-                    if(TestMatrix.get(i).get(4).equals("yes")){
+                    if(TestMatrix.get(i).get(IndexKelas).equals("yes")){
                         truepos++;
                     }
                     else{
