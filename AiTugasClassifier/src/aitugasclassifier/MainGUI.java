@@ -319,6 +319,7 @@ public class MainGUI extends JFrame {
                        openTestBtn.setVisible(false);
                        LabelEntry.setVisible(true);
                        entry.setVisible(true);
+                       
                        //check jika elemen pertama data tidak null maka mulai algoritma
                        if (!(data[0][0].equals(""))) {
                            System.out.println("Starting Algorithm:");
@@ -327,7 +328,6 @@ public class MainGUI extends JFrame {
                            int num = Integer.parseInt(entry.getText());
                            String[][] Acuan = new String[cData][cKolomData+1];
                            ClassifierKNN.KNNTenFold(data,Acuan,num,cData,cKolomData);
-                           
                        } else {
                            System.out.println("Please input data first");
                            

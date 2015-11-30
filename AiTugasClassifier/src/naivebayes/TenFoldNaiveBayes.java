@@ -208,7 +208,7 @@ public class TenFoldNaiveBayes {
                     RealClass++;
                 }
                 out.println("Kelas seharusnya = "+RealClass);
-                 out.println("Idx peluang terbesar = "+cariPeluangTerbesar);
+                out.println("Idx peluang terbesar = "+cariPeluangTerbesar);
                      if (TestMatrix.get(i).get(IndexKelas).equals(TestMatrix.get(i).get(cariPeluangTerbesar))){
                          //Correctly classifying true positif or true negative is in diagonal
                          ConfusionMatrix[cariPeluangTerbesar][cariPeluangTerbesar] = ConfusionMatrix[cariPeluangTerbesar][cariPeluangTerbesar]+1;
@@ -231,6 +231,9 @@ public class TenFoldNaiveBayes {
         
         }
         AkuisisiMatrix.clear();
+        
+        TestMatrix.clear();
+        matrix.clear();
     }
     
 }
