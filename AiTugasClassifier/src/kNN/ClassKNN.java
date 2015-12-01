@@ -189,10 +189,10 @@ public class ClassKNN {
                 });
                 
                 //hitung banyak yes dan no
-                for (i=0; i < num; i++)
+                for (k=0; k < num; k++)
                 {
                     for (int iKelas = 0; iKelas < JenisKelas.size(); iKelas++) {
-                        if (Acuan[i][IndexKelas].equals(listJenisKelas.get(iKelas))){
+                        if (Acuan[k][IndexKelas].equals(listJenisKelas.get(iKelas))){
                             Peluang[iKelas] = Peluang[iKelas] + 1;
                         }
                     }
@@ -201,8 +201,9 @@ public class ClassKNN {
                 int[] IndexPeluang = new int[Peluang.length];
                 System.arraycopy(Peluang, 0, IndexPeluang, 0, Peluang.length);
                 Arrays.sort(Peluang);
+                out.println(currIndex);
                 out.println("Peluang:" + Arrays.toString(Peluang));
-                out.println("Idx Peluang:" +Arrays.toString(IndexPeluang));
+                out.println("Idx Peluang:" +Arrays.toString(IndexPeluang)); 
 
                 //Search index dari IndexPeluang yang merupakan tebakan klasifikasi kelas sementara
                 int cariPeluangTerbesar=0;
@@ -221,6 +222,7 @@ public class ClassKNN {
                 }
                 out.println("Kelas seharusnya = "+RealClass+DataSet[k][IndexKelas]);
                 out.println("Idx peluang terbesar = "+cariPeluangTerbesar);
+                out.println("i = "+i);
                 if (DataSet[currIndex][IndexKelas].equals(DataSet[currIndex][cariPeluangTerbesar])){
                   //Correctly classifying true positif or true negative is in diagonal
                   ConfusionMatrix[cariPeluangTerbesar][cariPeluangTerbesar] = ConfusionMatrix[cariPeluangTerbesar][cariPeluangTerbesar]+1;
@@ -233,6 +235,7 @@ public class ClassKNN {
             jumlahMark-=endMark;
         }
         //untuk iterasi terakhir
+        out.println("BATAS ============================" + currIndex + " NTotal = "+NTotal);
         for (i=currIndex;i<NTotal;i++)
         {
             
@@ -272,10 +275,10 @@ public class ClassKNN {
             });
 
             //hitung banyak yes dan no
-            for (i=0; i < num; i++)
+            for (k=0; k < num; k++)
             {
                 for (int iKelas = 0; iKelas < JenisKelas.size(); iKelas++) {
-                    if (Acuan[i][IndexKelas].equals(listJenisKelas.get(iKelas))){
+                    if (Acuan[k][IndexKelas].equals(listJenisKelas.get(iKelas))){
                         Peluang[iKelas] = Peluang[iKelas] + 1;
                     }
                 }
@@ -284,6 +287,7 @@ public class ClassKNN {
             int[] IndexPeluang = new int[Peluang.length];
             System.arraycopy(Peluang, 0, IndexPeluang, 0, Peluang.length);
             Arrays.sort(Peluang);
+            out.println(currIndex);
             out.println("Peluang:" + Arrays.toString(Peluang));
             out.println("Idx Peluang:" +Arrays.toString(IndexPeluang));
 
@@ -309,8 +313,9 @@ public class ClassKNN {
             } else {
               ConfusionMatrix[RealClass][cariPeluangTerbesar] = ConfusionMatrix[RealClass][cariPeluangTerbesar]+1;
             }
-
+            
             currIndex++;
+            out.println("AAA "+currIndex+" "+NTotal);
         }
         //print out hasil akhir
         out.println("Classified as :");
